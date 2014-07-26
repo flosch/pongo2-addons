@@ -2,13 +2,15 @@
 
 Official filter and tag add-ons for [pongo2](https://github.com/flosch/pongo2). Uses 3rd-party-libraries.
 
-## How to install
+## How to use and install
+
+Install via `go get -u github.com/flosch/pongo2-addons`.
 
 Simply add the following import line **after** importing pongo2:
 
     _ "github.com/flosch/pongo2-addons"
 
-All filters/tags will be registered automatically.
+All additional filters/tags will be registered automatically.
 
 ## Filters
 

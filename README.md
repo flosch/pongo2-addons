@@ -13,6 +13,7 @@ All filters/tags will be registered automatically.
 ## Filters
 
   - **markdown** (parses markdown text and outputs HTML; **hint**: use the **safe**-filter to make the output not being escaped)
+  - **slugify** (creates a slug for a given input)
 
 ## Tags
 

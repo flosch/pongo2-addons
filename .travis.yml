@@ -6,5 +6,8 @@ go:
 install:
   - go get code.google.com/p/go.tools/cmd/cover
   - go get gopkg.in/check.v1
+  - go get github.com/flosch/pongo2
+  - go get github.com/russross/blackfriday
+  - go get github.com/extemporalgenome/slug
 script:
   - go test -v -covermode=count -coverprofile=coverage.out

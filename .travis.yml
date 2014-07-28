@@ -9,5 +9,6 @@ install:
   - go get github.com/flosch/pongo2
   - go get github.com/russross/blackfriday
   - go get github.com/extemporalgenome/slug
+  - go get github.com/flosch/go-humanize
 script:
   - go test -v -covermode=count -coverprofile=coverage.out

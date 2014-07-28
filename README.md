@@ -15,7 +15,9 @@ All additional filters/tags will be registered automatically.
 ## Filters
 
   - **markdown** (parses markdown text and outputs HTML; **hint**: use the **safe**-filter to make the output not being escaped)
-  - **slugify** (creates a slug for a given input)
+  - **[slugify](https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#slugify)** (creates a slug for a given input)
+  - **[filesizeformat](https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#filesizeformat)** (human-readable filesize; takes bytes as input)
+  - **[timesince](https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#timesince)/[timeuntil](https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#timeuntil)** (human-readable time duration indicator)
 
 ## Tags
 

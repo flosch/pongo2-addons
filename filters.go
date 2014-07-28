@@ -17,6 +17,8 @@ func init() {
 	pongo2.RegisterFilter("filesizeformat", filterFilesizeformat)
 	pongo2.RegisterFilter("timeuntil", filterTimeuntilTimesince)
 	pongo2.RegisterFilter("timesince", filterTimeuntilTimesince)
+	pongo2.RegisterFilter("naturaltime", filterTimeuntilTimesince)
+	pongo2.RegisterFilter("intcomma", filterIntcomma)
 }
 
 func filterMarkdown(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
@@ -47,4 +49,8 @@ func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Va
 	}
 
 	return pongo2.AsValue(humanize.TimeDuration(basetime.Sub(paramtime))), nil
+}
+
+func filterIntcomma(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+	return pongo2.AsValue(humanize.Comma(int64(in.Integer()))), nil
 }

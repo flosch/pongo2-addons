@@ -43,4 +43,13 @@ func (s *TestSuite1) TestFilters(c *C) {
 	future_date = base_date.Add(2 * time.Hour)
 	c.Assert(pongo2.RenderTemplateString("{{ base_date|timesince:future_date }}",
 			pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "2 hours ago")
+
+	// Natural time
+	base_date = time.Date(2014, time.February, 1, 8, 30, 00, 00, time.UTC)
+	future_date = base_date.Add(4 * time.Second)
+	c.Assert(pongo2.RenderTemplateString("{{ base_date|naturaltime:future_date }}",
+			pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "4 seconds ago")
+
+	// Intcomma
+	c.Assert(pongo2.RenderTemplateString("{{ 123456789|intcomma }}", nil), Equals, "123,456,789")
 }

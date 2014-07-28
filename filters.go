@@ -19,6 +19,7 @@ func init() {
 	pongo2.RegisterFilter("timesince", filterTimeuntilTimesince)
 	pongo2.RegisterFilter("naturaltime", filterTimeuntilTimesince)
 	pongo2.RegisterFilter("intcomma", filterIntcomma)
+	pongo2.RegisterFilter("ordinal", filterOrdinal)
 }
 
 func filterMarkdown(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
@@ -53,4 +54,8 @@ func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Va
 
 func filterIntcomma(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
 	return pongo2.AsValue(humanize.Comma(int64(in.Integer()))), nil
+}
+
+func filterOrdinal(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+	return pongo2.AsValue(humanize.Ordinal(in.Integer())), nil
 }

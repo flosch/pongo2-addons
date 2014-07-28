@@ -52,4 +52,8 @@ func (s *TestSuite1) TestFilters(c *C) {
 
 	// Intcomma
 	c.Assert(pongo2.RenderTemplateString("{{ 123456789|intcomma }}", nil), Equals, "123,456,789")
+
+	// Ordinal
+	c.Assert(pongo2.RenderTemplateString("{{ 1|ordinal }} {{ 2|ordinal }} {{ 3|ordinal }} {{ 18241|ordinal }}", nil),
+		Equals, "1st 2nd 3rd 18241st")
 }

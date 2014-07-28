@@ -30,6 +30,7 @@ All additional filters/tags will be registered automatically.
   - Humanize
      - **[intcomma](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#intcomma)** (put decimal marks into the number)
      - **[ordinal](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#ordinal)** (convert integer to its ordinal as string)
+     - **[naturalday](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#naturalday)** (converts `time.Time`-object into today/yesterday/tomorrow if possible; otherwise it will use `naturaltime`)
      - **[timesince](https://docs.djangoproject.com/en/dev/ref/templates/builtins/#timesince)/[timeuntil](https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#timeuntil)/[naturaltime](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#naturaltime)** (human-readable time [duration] indicator)
 
 ### Tags

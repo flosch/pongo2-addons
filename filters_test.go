@@ -1,8 +1,8 @@
 package pongo2addons
 
 import (
-	"time"
 	"testing"
+	"time"
 
 	. "gopkg.in/check.v1"
 
@@ -30,25 +30,39 @@ func (s *TestSuite1) TestFilters(c *C) {
 
 	// Timesince/timeuntil
 	base_date := time.Date(2014, time.February, 1, 8, 30, 00, 00, time.UTC)
-	future_date := base_date.Add(24 * 7 * 4 * time.Hour + 2 * time.Hour)
+	future_date := base_date.Add(24*7*4*time.Hour + 2*time.Hour)
 	c.Assert(pongo2.RenderTemplateString("{{ future_date|timeuntil:base_date }}",
-			pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "4 weeks from now")
+		pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "4 weeks from now")
 
 	base_date = time.Date(2014, time.February, 1, 8, 30, 00, 00, time.UTC)
 	future_date = base_date.Add(2 * time.Hour)
 	c.Assert(pongo2.RenderTemplateString("{{ future_date|timeuntil:base_date }}",
-			pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "2 hours from now")
+		pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "2 hours from now")
 
 	base_date = time.Date(2014, time.February, 1, 8, 30, 00, 00, time.UTC)
 	future_date = base_date.Add(2 * time.Hour)
 	c.Assert(pongo2.RenderTemplateString("{{ base_date|timesince:future_date }}",
-			pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "2 hours ago")
+		pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "2 hours ago")
 
 	// Natural time
 	base_date = time.Date(2014, time.February, 1, 8, 30, 00, 00, time.UTC)
 	future_date = base_date.Add(4 * time.Second)
 	c.Assert(pongo2.RenderTemplateString("{{ base_date|naturaltime:future_date }}",
-			pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "4 seconds ago")
+		pongo2.Context{"base_date": base_date, "future_date": future_date}), Equals, "4 seconds ago")
+
+	// Naturalday
+	today := time.Date(2014, time.February, 1, 8, 30, 00, 00, time.UTC)
+	yesterday := today.Add(-24 * time.Hour)
+	tomorrow := today.Add(24 * time.Hour)
+	today_plus_3 := today.Add(3 * 24 * time.Hour)
+	c.Assert(pongo2.RenderTemplateString("{{ date|naturalday:today }}",
+		pongo2.Context{"date": today, "today": today}), Equals, "today")
+	c.Assert(pongo2.RenderTemplateString("{{ date|naturalday:today }}",
+		pongo2.Context{"date": yesterday, "today": today}), Equals, "yesterday")
+	c.Assert(pongo2.RenderTemplateString("{{ date|naturalday:today }}",
+		pongo2.Context{"date": tomorrow, "today": today}), Equals, "tomorrow")
+	c.Assert(pongo2.RenderTemplateString("{{ date|naturalday:today }}",
+		pongo2.Context{"date": today_plus_3, "today": today}), Equals, "3 days from now")
 
 	// Intcomma
 	c.Assert(pongo2.RenderTemplateString("{{ 123456789|intcomma }}", nil), Equals, "123,456,789")

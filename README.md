@@ -40,3 +40,11 @@ All additional filters/tags will be registered automatically.
 ## TODO
 
  - Support i18n/i10n
+
+## Used libraries
+
+I want to thank the authors of these libraries (which are being used in `pongo2-addons`):
+
+ * [github.com/extemporalgenome/slug](https://github.com/extemporalgenome/slug)
+ * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
+ * [github.com/russross/blackfriday](https://github.com/russross/blackfriday)

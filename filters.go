@@ -3,6 +3,8 @@ package pongo2addons
 import (
 	"errors"
 	"time"
+	"regexp"
+	"strings"
 
 	"github.com/flosch/pongo2"
 
@@ -12,9 +14,15 @@ import (
 )
 
 func init() {
-	pongo2.RegisterFilter("markdown", filterMarkdown)
+	// Regulars
 	pongo2.RegisterFilter("slugify", filterSlugify)
 	pongo2.RegisterFilter("filesizeformat", filterFilesizeformat)
+	pongo2.RegisterFilter("truncatesentences", filterTruncatesentences)
+
+	// Markup
+	pongo2.RegisterFilter("markdown", filterMarkdown)
+
+	// Humanize
 	pongo2.RegisterFilter("timeuntil", filterTimeuntilTimesince)
 	pongo2.RegisterFilter("timesince", filterTimeuntilTimesince)
 	pongo2.RegisterFilter("naturaltime", filterTimeuntilTimesince)
@@ -33,6 +41,17 @@ func filterSlugify(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error)
 
 func filterFilesizeformat(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
 	return pongo2.AsValue(humanize.IBytes(uint64(in.Integer()))), nil
+}
+
+var filterTruncatesentencesRe = regexp.MustCompile(`(?U:.*[\w]{3,}.*([\d][\.!?][\D]|[\D][\.!?][\s]|[\n$]))`)
+
+func filterTruncatesentences(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+	count := param.Integer()
+	if count <= 0 {
+		return pongo2.AsValue(""), nil
+	}
+	sentencens := filterTruncatesentencesRe.FindAllString(strings.TrimSpace(in.String()), -1)
+	return pongo2.AsValue(strings.TrimSpace(strings.Join(sentencens[:min(count, len(sentencens))], ""))), nil
 }
 
 func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {

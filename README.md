@@ -23,7 +23,7 @@ All additional filters/tags will be registered automatically.
   - Regulars
      - **[filesizeformat](https://docs.djangoproject.com/en/dev/ref/templates/builtins/#filesizeformat)** (human-readable filesize; takes bytes as input)
      - **[slugify](https://docs.djangoproject.com/en/dev/ref/templates/builtins/#slugify)** (creates a slug for a given input)
-     - **truncatesentences** (returns the first X sentences [like truncatechars/truncatewords]; please provide X as a parameter)
+     - **truncatesentences** / **truncatesentences_html** (returns the first X sentences [like truncatechars/truncatewords]; please provide X as a parameter)
 
   - Markup
      - **markdown** (parses markdown text and outputs HTML; **hint**: use the **safe**-filter to make the output not being escaped)

@@ -18,9 +18,6 @@ type TestSuite1 struct{}
 
 var _ = Suite(&TestSuite1{})
 
-// Taken from http://www.florian-schlachter.de/post/pongo2-10-rc1/
-const demoText = `This is a first sentencen with a 4.50 number. The second one is even more fun! Isn't it? Last sentence, okay.`
-
 func (s *TestSuite1) TestFilters(c *C) {
 	// Markdown
 	c.Assert(pongo2.RenderTemplateString("{{ \"**test**\"|markdown|safe }}", nil), Equals, "<p><strong>test</strong></p>\n")
@@ -75,6 +72,15 @@ func (s *TestSuite1) TestFilters(c *C) {
 		Equals, "1st 2nd 3rd 18241st")
 
 	// Truncatesentences
-	c.Assert(pongo2.RenderTemplateString("{{ text|truncatesentences:3|safe }}", pongo2.Context{"text": demoText}),
-		Equals, "This is a first sentencen with a 4.50 number. The second one is even more fun! Isn't it?")
+	c.Assert(pongo2.RenderTemplateString("{{ text|truncatesentences:3|safe }}", pongo2.Context{
+		"text": `This is a first sentence with a 4.50 number. The second one is even more fun! Isn't it? Last sentence, okay.`}),
+		Equals, "This is a first sentence with a 4.50 number. The second one is even more fun! Isn't it?")
+
+	// Truncatesentences_html
+	c.Assert(pongo2.RenderTemplateString("{{ text|truncatesentences_html:2|safe }}", pongo2.Context{
+		"text": `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li><li>Last sentence, okay.</li></ul></div>`}),
+		Equals, `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun!</li></ul></div>`)
+	c.Assert(pongo2.RenderTemplateString("{{ text|truncatesentences_html:3|safe }}", pongo2.Context{
+		"text": `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li><li>Last sentence, okay.</li></ul></div>`}),
+		Equals, `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li></ul></div>`)
 }

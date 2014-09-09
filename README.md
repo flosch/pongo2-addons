@@ -1,7 +1,7 @@
 # pongo2-addons
 
 [![Build Status](https://travis-ci.org/flosch/pongo2-addons.svg?branch=master)](https://travis-ci.org/flosch/pongo2-addons)
-[![GitTip](http://img.shields.io/badge/gittip-support%20pongo-brightgreen.svg)](https://www.gittip.com/flosch/)
+[![Gratipay](http://img.shields.io/badge/gratipay-support%20pongo-brightgreen.svg)](https://gratipay.com/flosch/)
 
 Official filter and tag add-ons for [pongo2](https://github.com/flosch/pongo2). Since this package uses 
 3rd-party-libraries, it's in its own package.

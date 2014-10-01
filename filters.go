@@ -36,7 +36,7 @@ func init() {
 }
 
 func filterMarkdown(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
-	return pongo2.AsValue(string(blackfriday.MarkdownCommon([]byte(in.String())))), nil
+	return pongo2.AsSafeValue(string(blackfriday.MarkdownCommon([]byte(in.String())))), nil
 }
 
 func filterSlugify(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {

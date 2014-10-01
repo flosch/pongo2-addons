@@ -26,7 +26,7 @@ All additional filters/tags will be registered automatically.
      - **truncatesentences** / **truncatesentences_html** (returns the first X sentences [like truncatechars/truncatewords]; please provide X as a parameter)
 
   - Markup
-     - **markdown** (parses markdown text and outputs HTML; **hint**: use the **safe**-filter to make the output not being escaped)
+     - **markdown**
   
   - Humanize
      - **[intcomma](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#intcomma)** (put decimal marks into the number)

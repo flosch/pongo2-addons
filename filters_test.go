@@ -20,7 +20,7 @@ var _ = Suite(&TestSuite1{})
 
 func (s *TestSuite1) TestFilters(c *C) {
 	// Markdown
-	c.Assert(pongo2.RenderTemplateString("{{ \"**test**\"|markdown|safe }}", nil), Equals, "<p><strong>test</strong></p>\n")
+	c.Assert(pongo2.RenderTemplateString("{{ \"**test**\"|markdown }}", nil), Equals, "<p><strong>test</strong></p>\n")
 
 	// Slugify
 	c.Assert(pongo2.RenderTemplateString("{{ \"this is ä test!\"|slugify }}", nil), Equals, "this-is-a-test")

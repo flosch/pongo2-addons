@@ -77,10 +77,10 @@ func (s *TestSuite1) TestFilters(c *C) {
 		Equals, "This is a first sentence with a 4.50 number. The second one is even more fun! Isn't it?")
 
 	// Truncatesentences_html
-	c.Assert(pongo2.RenderTemplateString("{{ text|truncatesentences_html:2|safe }}", pongo2.Context{
+	c.Assert(pongo2.RenderTemplateString("{{ text|truncatesentences_html:2 }}", pongo2.Context{
 		"text": `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li><li>Last sentence, okay.</li></ul></div>`}),
 		Equals, `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun!</li></ul></div>`)
-	c.Assert(pongo2.RenderTemplateString("{{ text|truncatesentences_html:3|safe }}", pongo2.Context{
+	c.Assert(pongo2.RenderTemplateString("{{ text|truncatesentences_html:3 }}", pongo2.Context{
 		"text": `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li><li>Last sentence, okay.</li></ul></div>`}),
 		Equals, `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li></ul></div>`)
 }

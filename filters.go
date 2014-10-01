@@ -215,7 +215,7 @@ func filterTruncatesentencesHtml(in *pongo2.Value, param *pongo2.Value) (*pongo2
 		return idx
 	}, func() {})
 
-	return pongo2.AsValue(new_output.String()), nil
+	return pongo2.AsSafeValue(new_output.String()), nil
 }
 
 func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {

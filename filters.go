@@ -2,7 +2,6 @@ package pongo2addons
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -35,21 +34,21 @@ func init() {
 	pongo2.RegisterFilter("ordinal", filterOrdinal)
 }
 
-func filterMarkdown(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterMarkdown(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	return pongo2.AsSafeValue(string(blackfriday.MarkdownCommon([]byte(in.String())))), nil
 }
 
-func filterSlugify(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterSlugify(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	return pongo2.AsValue(slug.Slug(in.String())), nil
 }
 
-func filterFilesizeformat(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterFilesizeformat(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	return pongo2.AsValue(humanize.IBytes(uint64(in.Integer()))), nil
 }
 
 var filterTruncatesentencesRe = regexp.MustCompile(`(?U:.*[\w]{3,}.*([\d][\.!?][\D]|[\D][\.!?][\s]|[\n$]))`)
 
-func filterTruncatesentences(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterTruncatesentences(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	count := param.Integer()
 	if count <= 0 {
 		return pongo2.AsValue(""), nil
@@ -165,7 +164,7 @@ func filterTruncateHtmlHelper(value string, new_output *bytes.Buffer, cond func(
 	}
 }
 
-func filterTruncatesentencesHtml(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterTruncatesentencesHtml(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	count := param.Integer()
 	if count <= 0 {
 		return pongo2.AsValue(""), nil
@@ -218,16 +217,22 @@ func filterTruncatesentencesHtml(in *pongo2.Value, param *pongo2.Value) (*pongo2
 	return pongo2.AsSafeValue(new_output.String()), nil
 }
 
-func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	basetime, is_time := in.Interface().(time.Time)
 	if !is_time {
-		return nil, errors.New("time-value is not a time.Time-instance.")
+		return nil, &pongo2.Error{
+			Sender: "filter:timeuntil/timesince",
+			ErrorMsg: "time-value is not a time.Time-instance.",
+		}
 	}
 	var paramtime time.Time
 	if !param.IsNil() {
 		paramtime, is_time = param.Interface().(time.Time)
 		if !is_time {
-			return nil, errors.New("time-parameter is not a time.Time-instance.")
+			return nil, &pongo2.Error{
+				Sender: "filter:timeuntil/timesince",
+				ErrorMsg: "time-parameter is not a time.Time-instance.",
+			}
 		}
 	} else {
 		paramtime = time.Now()
@@ -236,25 +241,31 @@ func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Va
 	return pongo2.AsValue(humanize.TimeDuration(basetime.Sub(paramtime))), nil
 }
 
-func filterIntcomma(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterIntcomma(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	return pongo2.AsValue(humanize.Comma(int64(in.Integer()))), nil
 }
 
-func filterOrdinal(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterOrdinal(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	return pongo2.AsValue(humanize.Ordinal(in.Integer())), nil
 }
 
-func filterNaturalday(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, error) {
+func filterNaturalday(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	basetime, is_time := in.Interface().(time.Time)
 	if !is_time {
-		return nil, errors.New("naturalday-value is not a time.Time-instance.")
+		return nil, &pongo2.Error{
+			Sender: "filter:naturalday",
+			ErrorMsg: "naturalday-value is not a time.Time-instance.",
+		}
 	}
 
 	var reference_time time.Time
 	if !param.IsNil() {
 		reference_time, is_time = param.Interface().(time.Time)
 		if !is_time {
-			return nil, errors.New("naturalday-parameter is not a time.Time-instance.")
+			return nil, &pongo2.Error{
+				Sender: "filter:naturalday",
+				ErrorMsg: "naturalday-parameter is not a time.Time-instance.",
+			}
 		}
 	} else {
 		reference_time = time.Now()

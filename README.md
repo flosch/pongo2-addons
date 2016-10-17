@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/flosch/pongo2-addons.svg?branch=master)](https://travis-ci.org/flosch/pongo2-addons)
 [![Gratipay](http://img.shields.io/badge/gratipay-support%20pongo-brightgreen.svg)](https://gratipay.com/flosch/)
 
-Official filter and tag add-ons for [pongo2](https://github.com/flosch/pongo2). Since this package uses 
+Official filter and tag add-ons for [pongo2](https://github.com/flosch/pongo2). Since this package uses
 3rd-party-libraries, it's in its own package.
 
 ## How to install and use
@@ -27,7 +27,7 @@ All additional filters/tags will be registered automatically.
 
   - Markup
      - **markdown**
-  
+
   - Humanize
      - **[intcomma](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#intcomma)** (put decimal marks into the number)
      - **[ordinal](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#ordinal)** (convert integer to its ordinal as string)
@@ -36,7 +36,9 @@ All additional filters/tags will be registered automatically.
 
 ### Tags
 
-(nothing yet)
+  - Custom
+     - **bindjson** (bind a json file to a local template variable) \
+       `{% bindjson "path/to/data.json" as data %} <h1>{{ data.caption }}</h1> {% endbindjson %}`
 
 ## TODO
 

@@ -2,7 +2,6 @@ package pongo2addons
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -13,6 +12,7 @@ import (
 
 	"github.com/extemporalgenome/slug"
 	"github.com/flosch/go-humanize"
+	"github.com/juju/errors"
 	"github.com/russross/blackfriday"
 )
 
@@ -21,7 +21,7 @@ func init() {
 	pongo2.RegisterFilter("slugify", filterSlugify)
 	pongo2.RegisterFilter("filesizeformat", filterFilesizeformat)
 	pongo2.RegisterFilter("truncatesentences", filterTruncatesentences)
-	pongo2.RegisterFilter("truncatesentences_html", filterTruncatesentencesHtml)
+	pongo2.RegisterFilter("truncatesentences_html", filterTruncatesentencesHTML)
 
 	// Markup
 	pongo2.RegisterFilter("markdown", filterMarkdown)
@@ -59,9 +59,9 @@ func filterTruncatesentences(in *pongo2.Value, param *pongo2.Value) (*pongo2.Val
 }
 
 // Taken from pongo2/filters_builtin.go
-func filterTruncateHtmlHelper(value string, new_output *bytes.Buffer, cond func() bool, fn func(c rune, s int, idx int) int, finalize func()) {
+func filterTruncateHTMLHelper(value string, newOutput *bytes.Buffer, cond func() bool, fn func(c rune, s int, idx int) int, finalize func()) {
 	vLen := len(value)
-	tag_stack := make([]string, 0)
+	tagStack := make([]string, 0)
 	idx := 0
 
 	for idx < vLen && !cond() {
@@ -72,17 +72,17 @@ func filterTruncateHtmlHelper(value string, new_output *bytes.Buffer, cond func(
 		}
 
 		if c == '<' {
-			new_output.WriteRune(c)
+			newOutput.WriteRune(c)
 			idx += s // consume "<"
 
 			if idx+1 < vLen {
 				if value[idx] == '/' {
 					// Close tag
 
-					new_output.WriteString("/")
+					newOutput.WriteString("/")
 
 					tag := ""
-					idx += 1 // consume "/"
+					idx++ // consume "/"
 
 					for idx < vLen {
 						c2, size2 := utf8.DecodeRuneInString(value[idx:])
@@ -100,21 +100,21 @@ func filterTruncateHtmlHelper(value string, new_output *bytes.Buffer, cond func(
 						idx += size2
 					}
 
-					if len(tag_stack) > 0 {
+					if len(tagStack) > 0 {
 						// Ideally, the close tag is TOP of tag stack
 						// In malformed HTML, it must not be, so iterate through the stack and remove the tag
-						for i := len(tag_stack) - 1; i >= 0; i-- {
-							if tag_stack[i] == tag {
+						for i := len(tagStack) - 1; i >= 0; i-- {
+							if tagStack[i] == tag {
 								// Found the tag
-								tag_stack[i] = tag_stack[len(tag_stack)-1]
-								tag_stack = tag_stack[:len(tag_stack)-1]
+								tagStack[i] = tagStack[len(tagStack)-1]
+								tagStack = tagStack[:len(tagStack)-1]
 								break
 							}
 						}
 					}
 
-					new_output.WriteString(tag)
-					new_output.WriteString(">")
+					newOutput.WriteString(tag)
+					newOutput.WriteString(">")
 				} else {
 					// Open tag
 
@@ -128,7 +128,7 @@ func filterTruncateHtmlHelper(value string, new_output *bytes.Buffer, cond func(
 							continue
 						}
 
-						new_output.WriteRune(c2)
+						newOutput.WriteRune(c2)
 
 						// End of tag found
 						if c2 == '>' {
@@ -148,7 +148,7 @@ func filterTruncateHtmlHelper(value string, new_output *bytes.Buffer, cond func(
 					}
 
 					// Add tag to stack
-					tag_stack = append(tag_stack, tag)
+					tagStack = append(tagStack, tag)
 				}
 			}
 		} else {
@@ -158,14 +158,14 @@ func filterTruncateHtmlHelper(value string, new_output *bytes.Buffer, cond func(
 
 	finalize()
 
-	for i := len(tag_stack) - 1; i >= 0; i-- {
-		tag := tag_stack[i]
+	for i := len(tagStack) - 1; i >= 0; i-- {
+		tag := tagStack[i]
 		// Close everything from the regular tag stack
-		new_output.WriteString(fmt.Sprintf("</%s>", tag))
+		newOutput.WriteString(fmt.Sprintf("</%s>", tag))
 	}
 }
 
-func filterTruncatesentencesHtml(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+func filterTruncatesentencesHTML(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	count := param.Integer()
 	if count <= 0 {
 		return pongo2.AsValue(""), nil
@@ -174,15 +174,15 @@ func filterTruncatesentencesHtml(in *pongo2.Value, param *pongo2.Value) (*pongo2
 	value := in.String()
 	newLen := max(param.Integer(), 0)
 
-	new_output := bytes.NewBuffer(nil)
+	newOutput := bytes.NewBuffer(nil)
 
 	sentencefilter := 0
 
-	filterTruncateHtmlHelper(value, new_output, func() bool {
+	filterTruncateHTMLHelper(value, newOutput, func() bool {
 		return sentencefilter >= newLen
 	}, func(_ rune, _ int, idx int) int {
 		// Get next word
-		word_found := false
+		wordFound := false
 
 		for idx < len(value) {
 			c2, size2 := utf8.DecodeRuneInString(value[idx:])
@@ -196,7 +196,7 @@ func filterTruncatesentencesHtml(in *pongo2.Value, param *pongo2.Value) (*pongo2
 				return idx
 			}
 
-			new_output.WriteRune(c2)
+			newOutput.WriteRune(c2)
 			idx += size2
 
 			if (c2 == '.' && !(idx+1 < len(value) && value[idx+1] >= '0' && value[idx+1] <= '9')) ||
@@ -204,35 +204,35 @@ func filterTruncatesentencesHtml(in *pongo2.Value, param *pongo2.Value) (*pongo2
 				// Sentence ends here, stop capturing it now
 				break
 			} else {
-				word_found = true
+				wordFound = true
 			}
 		}
 
-		if word_found {
+		if wordFound {
 			sentencefilter++
 		}
 
 		return idx
 	}, func() {})
 
-	return pongo2.AsSafeValue(new_output.String()), nil
+	return pongo2.AsSafeValue(newOutput.String()), nil
 }
 
 func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
-	basetime, is_time := in.Interface().(time.Time)
-	if !is_time {
+	basetime, isTime := in.Interface().(time.Time)
+	if !isTime {
 		return nil, &pongo2.Error{
 			Sender:    "filter:timeuntil/timesince",
-			OrigError: errors.New("time-value is not a time.Time-instance."),
+			OrigError: errors.New("time-value is not a time.Time-instance"),
 		}
 	}
 	var paramtime time.Time
 	if !param.IsNil() {
-		paramtime, is_time = param.Interface().(time.Time)
-		if !is_time {
+		paramtime, isTime = param.Interface().(time.Time)
+		if !isTime {
 			return nil, &pongo2.Error{
 				Sender:    "filter:timeuntil/timesince",
-				OrigError: errors.New("time-parameter is not a time.Time-instance."),
+				OrigError: errors.New("time-parameter is not a time.Time-instance"),
 			}
 		}
 	} else {
@@ -251,28 +251,28 @@ func filterOrdinal(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo
 }
 
 func filterNaturalday(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
-	basetime, is_time := in.Interface().(time.Time)
-	if !is_time {
+	basetime, isTime := in.Interface().(time.Time)
+	if !isTime {
 		return nil, &pongo2.Error{
 			Sender:    "filter:naturalday",
-			OrigError: errors.New("naturalday-value is not a time.Time-instance."),
+			OrigError: errors.New("naturalday-value is not a time.Time-instance"),
 		}
 	}
 
-	var reference_time time.Time
+	var referenceTime time.Time
 	if !param.IsNil() {
-		reference_time, is_time = param.Interface().(time.Time)
-		if !is_time {
+		referenceTime, isTime = param.Interface().(time.Time)
+		if !isTime {
 			return nil, &pongo2.Error{
 				Sender:    "filter:naturalday",
-				OrigError: errors.New("naturalday-parameter is not a time.Time-instance."),
+				OrigError: errors.New("naturalday-parameter is not a time.Time-instance"),
 			}
 		}
 	} else {
-		reference_time = time.Now()
+		referenceTime = time.Now()
 	}
 
-	d := reference_time.Sub(basetime) / time.Hour
+	d := referenceTime.Sub(basetime) / time.Hour
 
 	switch {
 	case d >= 0 && d < 24:

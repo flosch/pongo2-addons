@@ -18,6 +18,8 @@ import (
 )
 
 func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	// Regulars
 	pongo2.RegisterFilter("slugify", filterSlugify)
 	pongo2.RegisterFilter("filesizeformat", filterFilesizeformat)

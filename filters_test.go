@@ -89,4 +89,10 @@ func (s *TestSuite1) TestFilters(c *C) {
 	c.Assert(getResult("{{ text|truncatesentences_html:3 }}", pongo2.Context{
 		"text": `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li><li>Last sentence, okay.</li></ul></div>`}),
 		Equals, `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li></ul></div>`)
+
+	// Random
+	c.Assert(getResult("{{ array|random }}",
+		pongo2.Context{"array": []int{42}}),
+		Equals, "42")
+
 }

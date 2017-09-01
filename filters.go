@@ -222,19 +222,19 @@ func filterTruncatesentencesHTML(in *pongo2.Value, param *pongo2.Value) (*pongo2
 
 func filterRandom(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	if !in.CanSlice() {
-		return nil, &pongo2.Error {
-			Sender: "filter:random",
-			OrigError: error.New("input is not sliceable"),
+		return nil, &pongo2.Error{
+			Sender:    "filter:random",
+			OrigError: errors.New("input is not sliceable"),
 		}
 	}
-	
+
 	if in.Len() <= 0 {
-		return nil, &pongo2.Error {
-			Sender: "filter:random",
-			OrigError: error.New("input slice is empty"),
-		}	
+		return nil, &pongo2.Error{
+			Sender:    "filter:random",
+			OrigError: errors.New("input slice is empty"),
+		}
 	}
-	
+
 	return in.Index(rand.Intn(in.Len())), nil
 }
 

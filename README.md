@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/flosch/pongo2-addons.svg?branch=master)](https://travis-ci.org/flosch/pongo2-addons)
 [![Gratipay](http://img.shields.io/badge/gratipay-support%20pongo-brightgreen.svg)](https://gratipay.com/flosch/)
 
-Official filter and tag add-ons for [pongo2](https://github.com/flosch/pongo2). Since this package uses 
+Official filter and tag add-ons for [pongo2](https://github.com/flosch/pongo2). Since this package uses
 3rd-party-libraries, it's in its own package.
 
 ## How to install and use
@@ -24,10 +24,11 @@ All additional filters/tags will be registered automatically.
      - **[filesizeformat](https://docs.djangoproject.com/en/dev/ref/templates/builtins/#filesizeformat)** (human-readable filesize; takes bytes as input)
      - **[slugify](https://docs.djangoproject.com/en/dev/ref/templates/builtins/#slugify)** (creates a slug for a given input)
      - **truncatesentences** / **truncatesentences_html** (returns the first X sentences [like truncatechars/truncatewords]; please provide X as a parameter)
+     - **random** (returns a random element of the input slice)
 
   - Markup
      - **markdown**
-  
+
   - Humanize
      - **[intcomma](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#intcomma)** (put decimal marks into the number)
      - **[ordinal](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#ordinal)** (convert integer to its ordinal as string)

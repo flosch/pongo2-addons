@@ -3,6 +3,7 @@ package pongo2addons
 import (
 	"bytes"
 	"fmt"
+	"math/rand"
 	"regexp"
 	"strings"
 	"time"
@@ -17,11 +18,14 @@ import (
 )
 
 func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	// Regulars
 	pongo2.RegisterFilter("slugify", filterSlugify)
 	pongo2.RegisterFilter("filesizeformat", filterFilesizeformat)
 	pongo2.RegisterFilter("truncatesentences", filterTruncatesentences)
 	pongo2.RegisterFilter("truncatesentences_html", filterTruncatesentencesHTML)
+	pongo2.RegisterFilter("random", filterRandom)
 
 	// Markup
 	pongo2.RegisterFilter("markdown", filterMarkdown)
@@ -216,6 +220,24 @@ func filterTruncatesentencesHTML(in *pongo2.Value, param *pongo2.Value) (*pongo2
 	}, func() {})
 
 	return pongo2.AsSafeValue(newOutput.String()), nil
+}
+
+func filterRandom(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+	if !in.CanSlice() {
+		return nil, &pongo2.Error{
+			Sender:    "filter:random",
+			OrigError: errors.New("input is not sliceable"),
+		}
+	}
+
+	if in.Len() <= 0 {
+		return nil, &pongo2.Error{
+			Sender:    "filter:random",
+			OrigError: errors.New("input slice is empty"),
+		}
+	}
+
+	return in.Index(rand.Intn(in.Len())), nil
 }
 
 func filterTimeuntilTimesince(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {

@@ -37,7 +37,9 @@ All additional filters/tags will be registered automatically.
 
 ### Tags
 
-(nothing yet)
+  - Custom
+     - **bindjson** (bind a json file to a local template variable) \
+       `{% bindjson "path/to/data.json" as data %} <h1>{{ data.caption }}</h1> {% endbindjson %}`
 
 ## TODO
 

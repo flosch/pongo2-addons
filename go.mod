@@ -1,4 +1,4 @@
-module github.com/idc77/pongo2-addons
+module github.com/flosch/pongo2-addons
 
 go 1.14
 

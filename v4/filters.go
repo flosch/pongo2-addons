@@ -10,9 +10,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/extemporalgenome/slug"
 	"github.com/flosch/go-humanize"
 	"github.com/flosch/pongo2/v4"
+	"github.com/gosimple/slug"
 	"github.com/russross/blackfriday/v2"
 )
 
@@ -43,7 +43,7 @@ func filterMarkdown(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pong
 }
 
 func filterSlugify(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
-	return pongo2.AsValue(slug.Slug(in.String())), nil
+	return pongo2.AsValue(slug.Make(in.String())), nil
 }
 
 func filterFilesizeformat(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {

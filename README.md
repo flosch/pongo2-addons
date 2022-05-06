@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/flosch/pongo2-addons.svg?branch=master)](https://travis-ci.org/flosch/pongo2-addons)
 [![Gratipay](http://img.shields.io/badge/gratipay-support%20pongo-brightgreen.svg)](https://gratipay.com/flosch/)
 
-Official filter and tag add-ons for [pongo2](https://github.com/flosch/pongo2). Since this package uses
+Fork of the official filter and tag add-ons for [pongo2](https://github.com/flosch/pongo2). Since this package uses
 3rd-party-libraries, it's in its own package.
 
 ## How to install and use
@@ -12,7 +12,10 @@ Install via `go get -u github.com/flosch/pongo2-addons`. All dependencies will b
 
 Simply add the following import line **after** importing pongo2:
 
-    _ "github.com/flosch/pongo2-addons"
+
+master : `_ "github.com/idc77/pongo2-addons"`
+v4: `_ "github.com/idc77/pongo2-addons/v4"`
+v5: `_ "github.com/idc77/pongo2-addons/v5"`
 
 All additional filters/tags will be registered automatically.
 
@@ -47,6 +50,6 @@ All additional filters/tags will be registered automatically.
 
 I want to thank the authors of these libraries (which are being used in `pongo2-addons`):
 
- * [github.com/extemporalgenome/slug](https://github.com/extemporalgenome/slug)
+ * [github.com/gosimple/slug](https://github.com/gosimple/slug)
  * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
  * [github.com/russross/blackfriday](https://github.com/russross/blackfriday)

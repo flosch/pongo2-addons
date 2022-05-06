@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/flosch/pongo2"
+	"github.com/flosch/pongo2/v5"
 	. "gopkg.in/check.v1"
 )
 

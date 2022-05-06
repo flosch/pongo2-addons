@@ -12,7 +12,7 @@ import (
 
 	"github.com/extemporalgenome/slug"
 	"github.com/flosch/go-humanize"
-	"github.com/flosch/pongo2"
+	"github.com/flosch/pongo2/v4"
 	"github.com/russross/blackfriday/v2"
 )
 

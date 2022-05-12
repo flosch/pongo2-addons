@@ -1,15 +1,18 @@
-module github.com/flosch/pongo2-addons
+module github.com/iostrovok/pongo2-addons
 
-go 1.14
+go 1.18
 
 require (
 	github.com/extemporalgenome/slug v0.0.0-20150414033109-0320c85e32e0
 	github.com/flosch/go-humanize v0.0.0-20140728123800-3ba51eabe506
-	github.com/flosch/pongo2 v0.0.0-20200529170236-5abacdfa4915
-	github.com/flosch/pongo2/v4 v4.0.2 // indirect
+	github.com/flosch/pongo2/v5 v5.0.0
+	github.com/iostrovok/check v0.0.13
+	github.com/russross/blackfriday/v2 v2.1.0
+)
+
+require (
+	github.com/iostrovok/go-convert v0.1.9 // indirect
+	github.com/kr/text v0.1.0 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/russross/blackfriday/v2 v2.0.1
-	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
-	golang.org/x/text v0.3.3 // indirect
-	gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b
+	golang.org/x/text v0.3.7 // indirect
 )

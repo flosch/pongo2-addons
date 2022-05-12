@@ -35,6 +35,11 @@ All additional filters/tags will be registered automatically.
      - **[naturalday](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#naturalday)** (converts `time.Time`-object into today/yesterday/tomorrow if possible; otherwise it will use `naturaltime`)
      - **[timesince](https://docs.djangoproject.com/en/dev/ref/templates/builtins/#timesince)/[timeuntil](https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#timeuntil)/[naturaltime](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#naturaltime)** (human-readable time [duration] indicator)
 
+- Numeric
+    - **[iplus](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#intcomma)** (add an integer to the number)
+    - **[iminus](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#ordinal)** (remove an integer from a number)
+    - **[imultiply](https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#naturalday)** (multiply an integer by a number)
+
 ### Tags
 
 (nothing yet)

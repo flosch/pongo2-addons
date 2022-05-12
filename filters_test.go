@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	. "gopkg.in/check.v1"
+	. "github.com/iostrovok/check"
 
-	"github.com/flosch/pongo2"
+	"github.com/flosch/pongo2/v5"
 )
 
 // Hook up gocheck into the "go test" runner.
@@ -90,9 +90,39 @@ func (s *TestSuite1) TestFilters(c *C) {
 		"text": `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li><li>Last sentence, okay.</li></ul></div>`}),
 		Equals, `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li></ul></div>`)
 
+	c.Assert(getResult("{{ text|truncatesentences_html:0 }}", pongo2.Context{
+		"text": `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li><li>Last sentence, okay.</li></ul></div>`}),
+		Equals, ``)
+
+	c.Assert(getResult("{{ text|truncatesentences_html:'-1' }}", pongo2.Context{
+		"text": `<div class="test"><ul><li>This is a first sentence with a 4.50 number.</li><li>The second one is even more fun! Isn't it?</li><li>Last sentence, okay.</li></ul></div>`}),
+		Equals, ``)
+
 	// Random
 	c.Assert(getResult("{{ array|random }}",
 		pongo2.Context{"array": []int{42}}),
 		Equals, "42")
+
+}
+
+func (s *TestSuite1) TestFiltersNumeric(c *C) {
+	c.Assert(getResult("<h1>{{ text|iplus:1 }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>11</h1>")
+	c.Assert(getResult("<h1>{{ text|iplus:1.7 }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>11</h1>")
+	c.Assert(getResult("<h1>{{ text|iplus:'' }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>10</h1>")
+	c.Assert(getResult("<h1>{{ text|iplus:'0' }}</h1>", pongo2.Context{"text": "10"}), Equals, "<h1>10</h1>")
+	c.Assert(getResult("<h1>{{ text|iplus:'-20' }}<h1>", pongo2.Context{"text": `10`}), Equals, "<h1>-10<h1>")
+
+	c.Assert(getResult("<h1>{{ text|iminus:1 }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>9</h1>")
+	c.Assert(getResult("<h1>{{ text|iminus:1.3 }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>9</h1>")
+	c.Assert(getResult("<h1>{{ text|iminus:'' }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>10</h1>")
+	c.Assert(getResult("<h1>{{ text|iminus:'0' }}</h1>", pongo2.Context{"text": "10"}), Equals, "<h1>10</h1>")
+	c.Assert(getResult("<h1>{{ text|iminus:'-20' }}<h1>", pongo2.Context{"text": `10`}), Equals, "<h1>30<h1>")
+
+	c.Assert(getResult("<h1>{{ text|imultiply:1 }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>10</h1>")
+	c.Assert(getResult("<h1>{{ text|imultiply:1.5 }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>10</h1>")
+	c.Assert(getResult("<h1>{{ text|imultiply:11 }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>110</h1>")
+	c.Assert(getResult("<h1>{{ text|imultiply:'' }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>0</h1>")
+	c.Assert(getResult("<h1>{{ text|imultiply:'0' }}</h1>", pongo2.Context{"text": "10"}), Equals, "<h1>0</h1>")
+	c.Assert(getResult("<h1>{{ text|imultiply:'-20' }}<h1>", pongo2.Context{"text": `10`}), Equals, "<h1>-200<h1>")
 
 }

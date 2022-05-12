@@ -2,6 +2,15 @@
 *.o
 *.a
 *.so
+/.idea
+/.env
+.env
+/.vscode
+.DS_Store
+local
+coverage.out
+vendor/
+coverage*
 
 # Folders
 _obj

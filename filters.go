@@ -10,10 +10,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/flosch/pongo2/v4"
-
 	"github.com/extemporalgenome/slug"
 	"github.com/flosch/go-humanize"
+	"github.com/flosch/pongo2/v5"
 	"github.com/russross/blackfriday/v2"
 )
 
@@ -37,6 +36,12 @@ func init() {
 	pongo2.RegisterFilter("naturalday", filterNaturalday)
 	pongo2.RegisterFilter("intcomma", filterIntcomma)
 	pongo2.RegisterFilter("ordinal", filterOrdinal)
+
+	// Numeric
+	// Plus and minus signs
+	pongo2.RegisterFilter("iplus", filterIPlus)
+	pongo2.RegisterFilter("iminus", filterIMinus)
+	pongo2.RegisterFilter("imultiply", filterIMultiply)
 }
 
 func filterMarkdown(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
@@ -308,4 +313,16 @@ func filterNaturalday(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *po
 
 	// Default behaviour
 	return pongo2.ApplyFilter("naturaltime", in, param)
+}
+
+func filterIPlus(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+	return pongo2.AsValue(in.Integer() + param.Integer()), nil
+}
+
+func filterIMinus(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+	return pongo2.AsValue(in.Integer() - param.Integer()), nil
+}
+
+func filterIMultiply(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+	return pongo2.AsValue(in.Integer() * param.Integer()), nil
 }

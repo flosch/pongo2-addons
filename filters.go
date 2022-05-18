@@ -37,11 +37,14 @@ func init() {
 	pongo2.RegisterFilter("intcomma", filterIntcomma)
 	pongo2.RegisterFilter("ordinal", filterOrdinal)
 
-	// Numeric
-	// Plus and minus signs
+	// Numeric, Plus and minus signs
 	pongo2.RegisterFilter("iplus", filterIPlus)
 	pongo2.RegisterFilter("iminus", filterIMinus)
 	pongo2.RegisterFilter("imultiply", filterIMultiply)
+
+	// Halpers
+	// Print error as error.Error()
+	pongo2.RegisterFilter("printerror", filterPrintError)
 }
 
 func filterMarkdown(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
@@ -325,4 +328,14 @@ func filterIMinus(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2
 
 func filterIMultiply(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	return pongo2.AsValue(in.Integer() * param.Integer()), nil
+}
+
+func filterPrintError(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+	i := in.Interface()
+	switch i.(type) {
+	case error:
+		return pongo2.AsValue(i.(error).Error()), nil
+	}
+
+	return pongo2.AsValue(i), nil
 }

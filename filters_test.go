@@ -1,6 +1,7 @@
 package pongo2addons
 
 import (
+	"errors"
 	"testing"
 	"time"
 
@@ -124,5 +125,15 @@ func (s *TestSuite1) TestFiltersNumeric(c *C) {
 	c.Assert(getResult("<h1>{{ text|imultiply:'' }}</h1>", pongo2.Context{"text": `10`}), Equals, "<h1>0</h1>")
 	c.Assert(getResult("<h1>{{ text|imultiply:'0' }}</h1>", pongo2.Context{"text": "10"}), Equals, "<h1>0</h1>")
 	c.Assert(getResult("<h1>{{ text|imultiply:'-20' }}<h1>", pongo2.Context{"text": `10`}), Equals, "<h1>-200<h1>")
+}
 
+func (s *TestSuite1) TestFilterPrintError(c *C) {
+	err := errors.New("simple error")
+	c.Assert(getResult("<h1>{{ err|printerror }}</h1>", pongo2.Context{"err": err}), Equals, "<h1>simple error</h1>")
+
+	err2 := "simple error string"
+	c.Assert(getResult("<h1>{{ err|printerror }}</h1>", pongo2.Context{"err": err2}), Equals, "<h1>simple error string</h1>")
+
+	err3 := 10
+	c.Assert(getResult("<h1>{{ err|printerror }}</h1>", pongo2.Context{"err": err3}), Equals, "<h1>10</h1>")
 }
